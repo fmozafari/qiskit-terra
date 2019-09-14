@@ -20,8 +20,9 @@ controlled-NOT gate.
 
 import numpy
 
+from qiskit.qasm import pi
 from qiskit.circuit import Gate
-from qiskit.circuit import QuantumCircuit
+from qiskit.circuit import QuantumCircuit, QuantumRegister
 
 
 class CnotGate(Gate):
@@ -30,6 +31,23 @@ class CnotGate(Gate):
     def __init__(self):
         """Create new CNOT gate."""
         super().__init__("cx", 2, [])
+
+    def _define(self):
+        from qiskit.extensions.standard.ry import RYGate
+        from qiskit.extensions.standard.ms import MSGate
+        from qiskit.extensions.standard.rx import RXGate
+        definition = []
+        q = QuantumRegister(2, "q")
+        rule = [
+            (RYGate(-pi/2), [q[0]], []),
+            (MSGate(-pi/4), [q[0], q[1]], []),
+            (RXGate(pi/2), [q[0]], []),
+            (RXGate(-pi/2), [q[1]], []),
+            (RYGate(pi/2), [q[0]], [])
+        ]
+        for inst in rule:
+            definition.append(inst)
+        self.definition = definition
 
     def inverse(self):
         """Invert this gate."""

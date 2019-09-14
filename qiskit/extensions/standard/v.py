@@ -45,7 +45,7 @@ class VGate(Gate):
         return VGate()  # self-inverse
 
     def to_matrix(self):
-        """Return a Numpy.array for the Y gate."""
+        """Return a Numpy.array for the V gate."""
         return numpy.array([[1+1j, 1-1j],
                             [1-1j, 1+1j]], dtype=complex) / 2.0
 

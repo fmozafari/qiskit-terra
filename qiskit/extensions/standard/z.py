@@ -21,6 +21,8 @@ from qiskit.circuit import QuantumCircuit
 from qiskit.circuit import QuantumRegister
 from qiskit.qasm import pi
 from qiskit.extensions.standard.u1 import U1Gate
+from qiskit.extensions.standard.h import HGate
+from qiskit.extensions.standard.x import XGate
 
 
 class ZGate(Gate):
@@ -30,7 +32,7 @@ class ZGate(Gate):
         """Create new Z gate."""
         super().__init__("z", 1, [], label=label)
 
-    def _define(self):
+    def decomposition(self):
         definition = []
         q = QuantumRegister(1, "q")
         rule = [
@@ -40,13 +42,13 @@ class ZGate(Gate):
             definition.append(inst)
         self.definition = definition
 
-    def decomposition(self):
+    def _define(self):
         definition = []
         q = QuantumRegister(1, "q")
         rule = [
-            (HGate, [q[0]], []),
-            (XGate, [q[0]], []),
-            (HGate, [q[0]], [])
+            (HGate(), [q[0]], []),
+            (XGate(), [q[0]], []),
+            (HGate(), [q[0]], [])
         ]
         for inst in rule:
             definition.append(inst)
